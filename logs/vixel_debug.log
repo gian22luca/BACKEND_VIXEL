@@ -15150,3 +15150,376 @@ TypeError: HTTP status code must be an integer.
             WHERE table_schema = DATABASE()
             ; args=None; alias=default
 [DEBUG] 2025-11-27 03:53:24,700 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 05:18:46,912 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 05:18:46,912 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 05:18:46,914 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 05:18:46,916 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 05:21:50,730 - django.db.backends.schema: CREATE TABLE `django_migrations` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `app` varchar(255) NOT NULL, `name` varchar(255) NOT NULL, `applied` datetime(6) NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:50,745 - django.db.backends.schema: CREATE TABLE `django_content_type` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(100) NOT NULL, `app_label` varchar(100) NOT NULL, `model` varchar(100) NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:50,760 - django.db.backends.schema: ALTER TABLE `django_content_type` ADD CONSTRAINT `django_content_type_app_label_model_76bd3d3b_uniq` UNIQUE (`app_label`, `model`); (params ())
+[DEBUG] 2025-11-27 05:21:50,781 - django.db.backends.schema: ALTER TABLE `django_content_type` MODIFY `name` varchar(100) NULL; (params [])
+[DEBUG] 2025-11-27 05:21:50,809 - django.db.backends.schema: ALTER TABLE `django_content_type` DROP COLUMN `name`; (params ())
+[DEBUG] 2025-11-27 05:21:50,834 - django.db.backends.schema: CREATE TABLE `auth_permission` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(50) NOT NULL, `content_type_id` integer NOT NULL, `codename` varchar(100) NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:50,849 - django.db.backends.schema: CREATE TABLE `auth_group` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(80) NOT NULL UNIQUE); (params None)
+[DEBUG] 2025-11-27 05:21:50,864 - django.db.backends.schema: CREATE TABLE `auth_group_permissions` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `group_id` integer NOT NULL, `permission_id` integer NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:50,880 - django.db.backends.schema: ALTER TABLE `auth_permission` ADD CONSTRAINT `auth_permission_content_type_id_codename_01ab375a_uniq` UNIQUE (`content_type_id`, `codename`); (params None)
+[DEBUG] 2025-11-27 05:21:50,891 - django.db.backends.schema: ALTER TABLE `auth_permission` ADD CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`); (params None)
+[DEBUG] 2025-11-27 05:21:50,924 - django.db.backends.schema: ALTER TABLE `auth_group_permissions` ADD CONSTRAINT `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` UNIQUE (`group_id`, `permission_id`); (params None)
+[DEBUG] 2025-11-27 05:21:50,934 - django.db.backends.schema: ALTER TABLE `auth_group_permissions` ADD CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`); (params None)
+[DEBUG] 2025-11-27 05:21:50,966 - django.db.backends.schema: ALTER TABLE `auth_group_permissions` ADD CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`); (params None)
+[DEBUG] 2025-11-27 05:21:51,007 - django.db.backends.schema: ALTER TABLE `auth_permission` MODIFY `name` varchar(255) NOT NULL; (params [])
+[DEBUG] 2025-11-27 05:21:51,067 - django.db.backends.schema: ALTER TABLE `auth_group` MODIFY `name` varchar(150) NOT NULL; (params [])
+[DEBUG] 2025-11-27 05:21:51,083 - django.db.backends.schema: CREATE TABLE `api_producto` (`nombre` varchar(100) NOT NULL, `descripcion` longtext NULL, `precio` numeric(10, 2) NOT NULL, `stock` integer NOT NULL, `id_producto` integer AUTO_INCREMENT NOT NULL PRIMARY KEY); (params None)
+[DEBUG] 2025-11-27 05:21:51,096 - django.db.backends.schema: CREATE TABLE `api_usuario` (`nombre` varchar(100) NOT NULL, `apellido` varchar(60) NOT NULL, `email` varchar(254) NOT NULL UNIQUE, `password` varchar(40) NOT NULL, `id_usuario` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `empleado` bool NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:51,114 - django.db.backends.schema: CREATE TABLE `api_customuser` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `password` varchar(128) NOT NULL, `last_login` datetime(6) NULL, `is_superuser` bool NOT NULL, `username` varchar(150) NOT NULL UNIQUE, `first_name` varchar(150) NOT NULL, `last_name` varchar(150) NOT NULL, `email` varchar(254) NOT NULL, `is_staff` bool NOT NULL, `is_active` bool NOT NULL, `date_joined` datetime(6) NOT NULL, `phone` varchar(15) NULL, `address` varchar(255) NULL, `birth_date` date NULL); (params None)
+[DEBUG] 2025-11-27 05:21:51,131 - django.db.backends.schema: CREATE TABLE `api_customuser_groups` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `customuser_id` bigint NOT NULL, `group_id` integer NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:51,147 - django.db.backends.schema: CREATE TABLE `api_customuser_user_permissions` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `customuser_id` bigint NOT NULL, `permission_id` integer NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:51,162 - django.db.backends.schema: CREATE TABLE `api_pedido` (`cantidad` integer UNSIGNED NOT NULL CHECK (`cantidad` >= 0), `fecha_pedido` datetime(6) NOT NULL, `id_pedido` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `precio_total` numeric(10, 2) NULL, `estado` varchar(20) NOT NULL, `producto_id` integer NOT NULL, `usuario_id` integer NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:51,178 - django.db.backends.schema: ALTER TABLE `api_customuser_groups` ADD CONSTRAINT `api_customuser_groups_customuser_id_group_id_d5b0c2ab_uniq` UNIQUE (`customuser_id`, `group_id`); (params None)
+[DEBUG] 2025-11-27 05:21:51,187 - django.db.backends.schema: ALTER TABLE `api_customuser_groups` ADD CONSTRAINT `api_customuser_group_customuser_id_9eb4b783_fk_api_custo` FOREIGN KEY (`customuser_id`) REFERENCES `api_customuser` (`id`); (params None)
+[DEBUG] 2025-11-27 05:21:51,219 - django.db.backends.schema: ALTER TABLE `api_customuser_groups` ADD CONSTRAINT `api_customuser_groups_group_id_f049027c_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`); (params None)
+[DEBUG] 2025-11-27 05:21:51,254 - django.db.backends.schema: ALTER TABLE `api_customuser_user_permissions` ADD CONSTRAINT `api_customuser_user_perm_customuser_id_permission_9deacd8d_uniq` UNIQUE (`customuser_id`, `permission_id`); (params None)
+[DEBUG] 2025-11-27 05:21:51,264 - django.db.backends.schema: ALTER TABLE `api_customuser_user_permissions` ADD CONSTRAINT `api_customuser_user__customuser_id_5365c9ba_fk_api_custo` FOREIGN KEY (`customuser_id`) REFERENCES `api_customuser` (`id`); (params None)
+[DEBUG] 2025-11-27 05:21:51,296 - django.db.backends.schema: ALTER TABLE `api_customuser_user_permissions` ADD CONSTRAINT `api_customuser_user__permission_id_8735d73e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`); (params None)
+[DEBUG] 2025-11-27 05:21:51,333 - django.db.backends.schema: ALTER TABLE `api_pedido` ADD CONSTRAINT `api_pedido_producto_id_8283951a_fk_api_producto_id_producto` FOREIGN KEY (`producto_id`) REFERENCES `api_producto` (`id_producto`); (params None)
+[DEBUG] 2025-11-27 05:21:51,365 - django.db.backends.schema: ALTER TABLE `api_pedido` ADD CONSTRAINT `api_pedido_usuario_id_6f75f6bd_fk_api_usuario_id_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `api_usuario` (`id_usuario`); (params None)
+[DEBUG] 2025-11-27 05:21:51,406 - django.db.backends.schema: CREATE TABLE `django_admin_log` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY, `action_time` datetime(6) NOT NULL, `object_id` longtext NULL, `object_repr` varchar(200) NOT NULL, `action_flag` smallint UNSIGNED NOT NULL CHECK (`action_flag` >= 0), `change_message` longtext NOT NULL, `content_type_id` integer NULL, `user_id` bigint NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:51,429 - django.db.backends.schema: ALTER TABLE `django_admin_log` ADD CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`); (params None)
+[DEBUG] 2025-11-27 05:21:51,475 - django.db.backends.schema: ALTER TABLE `django_admin_log` ADD CONSTRAINT `django_admin_log_user_id_c564eba6_fk_api_customuser_id` FOREIGN KEY (`user_id`) REFERENCES `api_customuser` (`id`); (params None)
+[DEBUG] 2025-11-27 05:21:51,540 - django.db.backends.schema: ALTER TABLE `api_pedido` DROP FOREIGN KEY `api_pedido_usuario_id_6f75f6bd_fk_api_usuario_id_usuario`; (params ())
+[DEBUG] 2025-11-27 05:21:51,546 - django.db.backends.schema: ALTER TABLE `api_pedido` MODIFY `usuario_id` bigint NOT NULL; (params [])
+[DEBUG] 2025-11-27 05:21:51,583 - django.db.backends.schema: ALTER TABLE `api_pedido` ADD CONSTRAINT `api_pedido_usuario_id_6f75f6bd_fk_api_customuser_id` FOREIGN KEY (`usuario_id`) REFERENCES `api_customuser` (`id`); (params ())
+[DEBUG] 2025-11-27 05:21:51,620 - django.db.backends.schema: DROP TABLE `api_usuario` CASCADE; (params ())
+[DEBUG] 2025-11-27 05:21:51,631 - django.db.backends.schema: ALTER TABLE `api_producto` ADD COLUMN `archivo` varchar(100) NULL; (params None)
+[DEBUG] 2025-11-27 05:21:51,657 - django.db.backends.schema: CREATE TABLE `api_pedidoitem` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `cantidad` integer UNSIGNED NOT NULL CHECK (`cantidad` >= 0), `pedido_id` integer NOT NULL, `producto_id` integer NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:51,671 - django.db.backends.schema: ALTER TABLE `api_pedidoitem` ADD CONSTRAINT `api_pedidoitem_pedido_id_d94f5f96_fk_api_pedido_id_pedido` FOREIGN KEY (`pedido_id`) REFERENCES `api_pedido` (`id_pedido`); (params None)
+[DEBUG] 2025-11-27 05:21:51,702 - django.db.backends.schema: ALTER TABLE `api_pedidoitem` ADD CONSTRAINT `api_pedidoitem_producto_id_6fa4e3e5_fk_api_producto_id_producto` FOREIGN KEY (`producto_id`) REFERENCES `api_producto` (`id_producto`); (params None)
+[DEBUG] 2025-11-27 05:21:51,747 - django.db.backends.schema: ALTER TABLE `api_pedido` DROP COLUMN `cantidad`; (params ())
+[DEBUG] 2025-11-27 05:21:51,788 - django.db.backends.schema: ALTER TABLE `api_pedido` DROP FOREIGN KEY `api_pedido_producto_id_8283951a_fk_api_producto_id_producto`; (params ())
+[DEBUG] 2025-11-27 05:21:51,794 - django.db.backends.schema: ALTER TABLE `api_pedido` MODIFY `producto_id` integer NULL; (params [])
+[DEBUG] 2025-11-27 05:21:51,821 - django.db.backends.schema: ALTER TABLE `api_pedido` ADD CONSTRAINT `api_pedido_producto_id_8283951a_fk_api_producto_id_producto` FOREIGN KEY (`producto_id`) REFERENCES `api_producto` (`id_producto`); (params ())
+[DEBUG] 2025-11-27 05:21:51,860 - django.db.backends.schema: CREATE TABLE `django_session` (`session_key` varchar(40) NOT NULL PRIMARY KEY, `session_data` longtext NOT NULL, `expire_date` datetime(6) NOT NULL); (params None)
+[DEBUG] 2025-11-27 05:21:51,871 - django.db.backends.schema: CREATE INDEX `django_session_expire_date_a5c62663` ON `django_session` (`expire_date`); (params None)
+[DEBUG] 2025-11-27 06:20:48,623 - django.db.backends: (0.001) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:48,624 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:48,627 - django.db.backends: (0.003) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:48,636 - django.db.backends: (0.007) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:20:49,849 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:49,850 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:49,851 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:49,914 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:49,916 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:49,919 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:20:49,920 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:49,921 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:20:49,931 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:20:49,932 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:20:49,936 - django.db.backends: (0.003) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'admin'; args=('admin',); alias=default
+[DEBUG] 2025-11-27 06:20:49,938 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'admin' AND `django_content_type`.`model` IN ('logentry')); args=('admin', 'logentry'); alias=default
+[DEBUG] 2025-11-27 06:20:49,940 - django.db.backends: (0.001) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (1) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(1,); alias=default
+[DEBUG] 2025-11-27 06:20:49,941 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'admin'; args=('admin',); alias=default
+[DEBUG] 2025-11-27 06:20:49,942 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'auth'; args=('auth',); alias=default
+[DEBUG] 2025-11-27 06:20:49,943 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'auth' AND `django_content_type`.`model` IN ('group', 'permission')); args=('auth', 'group', 'permission'); alias=default
+[DEBUG] 2025-11-27 06:20:49,945 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (2, 3) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(2, 3); alias=default
+[DEBUG] 2025-11-27 06:20:49,945 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'auth'; args=('auth',); alias=default
+[DEBUG] 2025-11-27 06:20:49,946 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'contenttypes'; args=('contenttypes',); alias=default
+[DEBUG] 2025-11-27 06:20:49,947 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'contenttypes' AND `django_content_type`.`model` IN ('contenttype')); args=('contenttypes', 'contenttype'); alias=default
+[DEBUG] 2025-11-27 06:20:49,948 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (4) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(4,); alias=default
+[DEBUG] 2025-11-27 06:20:49,949 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'contenttypes'; args=('contenttypes',); alias=default
+[DEBUG] 2025-11-27 06:20:49,950 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'sessions'; args=('sessions',); alias=default
+[DEBUG] 2025-11-27 06:20:49,951 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'sessions' AND `django_content_type`.`model` IN ('session')); args=('sessions', 'session'); alias=default
+[DEBUG] 2025-11-27 06:20:49,952 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (5) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(5,); alias=default
+[DEBUG] 2025-11-27 06:20:49,953 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'sessions'; args=('sessions',); alias=default
+[DEBUG] 2025-11-27 06:20:49,954 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'rest_framework_simplejwt'; args=('rest_framework_simplejwt',); alias=default
+[DEBUG] 2025-11-27 06:20:49,955 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'rest_framework_simplejwt'; args=('rest_framework_simplejwt',); alias=default
+[DEBUG] 2025-11-27 06:20:49,956 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'api'; args=('api',); alias=default
+[DEBUG] 2025-11-27 06:20:49,957 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'api' AND `django_content_type`.`model` IN ('pedido', 'pedidoitem', 'producto', 'customuser')); args=('api', 'pedido', 'pedidoitem', 'producto', 'customuser'); alias=default
+[DEBUG] 2025-11-27 06:20:49,958 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (8, 9, 6, 7) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(8, 9, 6, 7); alias=default
+[DEBUG] 2025-11-27 06:20:49,959 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'api'; args=('api',); alias=default
+[DEBUG] 2025-11-27 06:21:06,734 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:21:06,735 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:21:06,737 - django.db.backends: (0.002) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:21:06,740 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:23:01,310 - django.db.backends: (0.001) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:01,311 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:01,314 - django.db.backends: (0.003) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:01,324 - django.db.backends: (0.007) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:23:02,412 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:02,413 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:02,413 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:02,492 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:02,494 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:02,497 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:23:02,498 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:02,499 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:23:02,509 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:02,510 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:23:02,514 - django.db.backends: (0.003) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'admin'; args=('admin',); alias=default
+[DEBUG] 2025-11-27 06:23:02,515 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'admin' AND `django_content_type`.`model` IN ('logentry')); args=('admin', 'logentry'); alias=default
+[DEBUG] 2025-11-27 06:23:02,517 - django.db.backends: (0.001) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (1) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(1,); alias=default
+[DEBUG] 2025-11-27 06:23:02,518 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'admin'; args=('admin',); alias=default
+[DEBUG] 2025-11-27 06:23:02,519 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'auth'; args=('auth',); alias=default
+[DEBUG] 2025-11-27 06:23:02,520 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'auth' AND `django_content_type`.`model` IN ('permission', 'group')); args=('auth', 'permission', 'group'); alias=default
+[DEBUG] 2025-11-27 06:23:02,521 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (2, 3) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(2, 3); alias=default
+[DEBUG] 2025-11-27 06:23:02,522 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'auth'; args=('auth',); alias=default
+[DEBUG] 2025-11-27 06:23:02,523 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'contenttypes'; args=('contenttypes',); alias=default
+[DEBUG] 2025-11-27 06:23:02,524 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'contenttypes' AND `django_content_type`.`model` IN ('contenttype')); args=('contenttypes', 'contenttype'); alias=default
+[DEBUG] 2025-11-27 06:23:02,525 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (4) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(4,); alias=default
+[DEBUG] 2025-11-27 06:23:02,526 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'contenttypes'; args=('contenttypes',); alias=default
+[DEBUG] 2025-11-27 06:23:02,526 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'sessions'; args=('sessions',); alias=default
+[DEBUG] 2025-11-27 06:23:02,527 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'sessions' AND `django_content_type`.`model` IN ('session')); args=('sessions', 'session'); alias=default
+[DEBUG] 2025-11-27 06:23:02,528 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (5) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(5,); alias=default
+[DEBUG] 2025-11-27 06:23:02,529 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'sessions'; args=('sessions',); alias=default
+[DEBUG] 2025-11-27 06:23:02,529 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'rest_framework_simplejwt'; args=('rest_framework_simplejwt',); alias=default
+[DEBUG] 2025-11-27 06:23:02,530 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'rest_framework_simplejwt'; args=('rest_framework_simplejwt',); alias=default
+[DEBUG] 2025-11-27 06:23:02,531 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'api'; args=('api',); alias=default
+[DEBUG] 2025-11-27 06:23:02,532 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'api' AND `django_content_type`.`model` IN ('customuser', 'pedido', 'pedidoitem', 'producto')); args=('api', 'customuser', 'pedido', 'pedidoitem', 'producto'); alias=default
+[DEBUG] 2025-11-27 06:23:02,533 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (8, 9, 6, 7) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(8, 9, 6, 7); alias=default
+[DEBUG] 2025-11-27 06:23:02,534 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'api'; args=('api',); alias=default
+[DEBUG] 2025-11-27 06:23:19,218 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:19,219 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:19,221 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:19,225 - django.db.backends: (0.001) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:23:58,823 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:58,824 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:58,825 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:58,828 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:23:59,927 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:59,928 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:59,929 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:59,994 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:59,996 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:23:59,999 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:24:00,000 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:24:00,001 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:24:00,012 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:24:00,013 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default
+[DEBUG] 2025-11-27 06:24:00,015 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'admin'; args=('admin',); alias=default
+[DEBUG] 2025-11-27 06:24:00,016 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'admin' AND `django_content_type`.`model` IN ('logentry')); args=('admin', 'logentry'); alias=default
+[DEBUG] 2025-11-27 06:24:00,018 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (1) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(1,); alias=default
+[DEBUG] 2025-11-27 06:24:00,019 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'admin'; args=('admin',); alias=default
+[DEBUG] 2025-11-27 06:24:00,020 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'auth'; args=('auth',); alias=default
+[DEBUG] 2025-11-27 06:24:00,021 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'auth' AND `django_content_type`.`model` IN ('permission', 'group')); args=('auth', 'permission', 'group'); alias=default
+[DEBUG] 2025-11-27 06:24:00,023 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (2, 3) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(2, 3); alias=default
+[DEBUG] 2025-11-27 06:24:00,024 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'auth'; args=('auth',); alias=default
+[DEBUG] 2025-11-27 06:24:00,025 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'contenttypes'; args=('contenttypes',); alias=default
+[DEBUG] 2025-11-27 06:24:00,025 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'contenttypes' AND `django_content_type`.`model` IN ('contenttype')); args=('contenttypes', 'contenttype'); alias=default
+[DEBUG] 2025-11-27 06:24:00,027 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (4) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(4,); alias=default
+[DEBUG] 2025-11-27 06:24:00,027 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'contenttypes'; args=('contenttypes',); alias=default
+[DEBUG] 2025-11-27 06:24:00,028 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'sessions'; args=('sessions',); alias=default
+[DEBUG] 2025-11-27 06:24:00,029 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'sessions' AND `django_content_type`.`model` IN ('session')); args=('sessions', 'session'); alias=default
+[DEBUG] 2025-11-27 06:24:00,030 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (5) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(5,); alias=default
+[DEBUG] 2025-11-27 06:24:00,031 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'sessions'; args=('sessions',); alias=default
+[DEBUG] 2025-11-27 06:24:00,032 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'rest_framework_simplejwt'; args=('rest_framework_simplejwt',); alias=default
+[DEBUG] 2025-11-27 06:24:00,033 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'rest_framework_simplejwt'; args=('rest_framework_simplejwt',); alias=default
+[DEBUG] 2025-11-27 06:24:00,034 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'api'; args=('api',); alias=default
+[DEBUG] 2025-11-27 06:24:00,035 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE (`django_content_type`.`app_label` = 'api' AND `django_content_type`.`model` IN ('customuser', 'producto', 'pedidoitem', 'pedido')); args=('api', 'customuser', 'producto', 'pedidoitem', 'pedido'); alias=default
+[DEBUG] 2025-11-27 06:24:00,037 - django.db.backends: (0.000) SELECT `auth_permission`.`content_type_id` AS `content_type`, `auth_permission`.`codename` AS `codename` FROM `auth_permission` INNER JOIN `django_content_type` ON (`auth_permission`.`content_type_id` = `django_content_type`.`id`) WHERE `auth_permission`.`content_type_id` IN (8, 9, 6, 7) ORDER BY `django_content_type`.`app_label` ASC, `django_content_type`.`model` ASC, 2 ASC; args=(8, 9, 6, 7); alias=default
+[DEBUG] 2025-11-27 06:24:00,038 - django.db.backends: (0.000) SELECT `django_content_type`.`id`, `django_content_type`.`app_label`, `django_content_type`.`model` FROM `django_content_type` WHERE `django_content_type`.`app_label` = 'api'; args=('api',); alias=default
+[DEBUG] 2025-11-27 06:24:17,336 - django.db.backends: (0.000) 
+                SELECT VERSION(),
+                       @@sql_mode,
+                       @@default_storage_engine,
+                       @@sql_auto_is_null,
+                       @@lower_case_table_names,
+                       CONVERT_TZ('2001-01-01 01:00:00', 'UTC', 'UTC') IS NOT NULL
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:24:17,337 - django.db.backends: (0.000) SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED; args=None; alias=default
+[DEBUG] 2025-11-27 06:24:17,339 - django.db.backends: (0.001) 
+            SELECT
+                table_name,
+                table_type,
+                table_comment
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            ; args=None; alias=default
+[DEBUG] 2025-11-27 06:24:17,342 - django.db.backends: (0.000) SELECT `django_migrations`.`id`, `django_migrations`.`app`, `django_migrations`.`name`, `django_migrations`.`applied` FROM `django_migrations`; args=(); alias=default

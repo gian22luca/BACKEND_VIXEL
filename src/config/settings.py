@@ -25,7 +25,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = os.getenv('DEBUG', 'True') == 'False'
 ENV = os.getenv( 'production',"development")
 ALLOWED_HOST = os.getenv('ALLOWED_HOSTS', '').split(',')
 
@@ -129,16 +129,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "/static/"
-MEDIA_URL = "/media/"
-STATICFILES_DIRS = [BASE_DIR / "static_files"]
-MEDIA_ROOT = BASE_DIR / "media"
-STATIC_ROOT = BASE_DIR.parent / "static_files"
+#MEDIA_URL = "/media/"
+#static_dir = BASE_DIR / "static_files"
+#if static_dir.exists():
+#    STATICFILES_DIRS = [static_dir]
+#else:
+#    STATICFILES_DIRS = []
+
+#MEDIA_ROOT = BASE_DIR / "media"
+STATIC_ROOT = BASE_DIR / "static_files"
 
 STORAGES = {
     "deafault": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
-    "static_files": {
+    "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
