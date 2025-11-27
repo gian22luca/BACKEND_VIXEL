@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse , JsonResponse
 from rest_framework.views import APIView
-from .models import Usuario, Producto, Pedido, CustomUser
-from .serializers import UsuarioSerializer, ProductoSerializer, PedidoSerializer
+from .models import  Producto, Pedido, CustomUser, PedidoItem
+from django.shortcuts import get_object_or_404
+from .serializers import CustomUserSerializer, ProductoSerializer, PedidoSerializer, ContactoSerializer
 from rest_framework.response import Response
 from django.db.models.deletion import RestrictedError
 from rest_framework import status
@@ -20,7 +21,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Response as OpenAPIResponse
 
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer, ProductoSerializer
+from .serializers import CustomTokenObtainPairSerializer, ProductoSerializer 
 from rest_framework.viewsets import ModelViewSet
 import logging
 from django.core.mail import send_mail
@@ -72,102 +73,105 @@ def search_users_safe(request):
         'result': list(users)
     })
 
-class UsuarioAPIView(APIView):
+class CustomUserAPIView(APIView):
+    model = CustomUser
     permission_classes = [IsAuthenticated, IsAdminUser] 
     @swagger_auto_schema(
-        operation_description="Obtener una lista de usuarios",
+        operation_description="Obtener una lista de CustomUsers",
         responses={
-            200: UsuarioSerializer(many=True),
-            201: UsuarioSerializer,
+            200: CustomUserSerializer(many=True),
+            201: CustomUserSerializer,
             400: OpenAPIResponse(
                 description="Error de validación",
-                schema=UsuarioSerializer(many=True)
+                schema=CustomUserSerializer(many=True)
             ) 
         }
     )
     def get(self, request):
-        usuario = Usuario.objects.all()
+        customuser = CustomUser.objects.all()
         paginator =CustomPagination()
-        paginated_queryset = paginator.paginate_queryset(usuario, request)
-        usuario_serializer = UsuarioSerializer(usuario, many=True)
-        return paginator.get_paginated_response(usuario_serializer.data)
+        paginated_queryset = paginator.paginate_queryset(customuser, request)
+        CustomUser_serializer = CustomUserSerializer(customuser, many=True)
+        return paginator.get_paginated_response(CustomUser_serializer.data)
     
     @swagger_auto_schema(
-        operation_description="Crear un nuevo usuario",
-        request_body=UsuarioSerializer,
+        operation_description="Crear un nuevo CustomUser",
+        request_body=CustomUserSerializer,
         responses={
-            201: UsuarioSerializer,
+            201: CustomUserSerializer,
             400: "Error de validación"
         }
     )
     def post(self, request):
-        usuario_serializer = UsuarioSerializer(data=request.data)
-        if usuario_serializer.is_valid():
-            usuario_serializer.save()
-            return Response(usuario_serializer.data, status=201)
-        return Response(usuario_serializer.errors, status=400)
+        CustomUser_serializer = CustomUserSerializer(data=request.data)
+        if CustomUser_serializer.is_valid():
+            CustomUser_serializer.save()
+            return Response(CustomUser_serializer.data, status=201)
+        return Response(CustomUser_serializer.errors, status=400)
 
-class UsuarioDetalleAPIView(APIView):
+class CustomUserDetalleAPIView(APIView):
+    model = CustomUser
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
-        operation_description="Obtener un usuario por ID",
+        operation_description="Obtener un CustomUser por ID",
         responses={
-            200: UsuarioSerializer,
-            404: "Usuario no encontrado"
+            200: CustomUserSerializer,
+            404: "CustomUser no encontrado"
         }
     )
     def get(self, request, pk):
         try:
-            usuario = Usuario.objects.get(pk=pk)
-            usuario_serializer = UsuarioSerializer(usuario)
-            return Response(usuario_serializer.data)
-        except Usuario.DoesNotExist:
-            return Response({"error": "Usuario no encontrado"}, status.HTTP_404_NOT_FOUND)
+            customuser = CustomUser.objects.get(pk=pk)
+            CustomUser_serializer = CustomUserSerializer(customuser)
+            return Response(CustomUser_serializer.data)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "CustomUser no encontrado"}, status.HTTP_404_NOT_FOUND)
         
     @swagger_auto_schema(
-        operation_description="Actualizar un usuario por ID",
-        request_body=UsuarioSerializer,
+        operation_description="Actualizar un CustomUser por ID",
+        request_body=CustomUserSerializer,
         responses={
-            200: UsuarioSerializer,
+            200: CustomUserSerializer,
             400: "Error de validación",
-            404: "Usuario no encontrado"
+            404: "CustomUser no encontrado"
         }
     )
     def put(self, request, pk):
         try:
-            usuario = Usuario.objects.get(pk=pk)
-            usuario_serializer = UsuarioSerializer(usuario, data=request.data)
-            if usuario_serializer.is_valid():
-                usuario_serializer.save()
+            customuser = CustomUser.objects.get(pk=pk)
+            CustomUser_serializer = CustomUserSerializer(customuser, data=request.data)
+            if CustomUser_serializer.is_valid():
+                CustomUser_serializer.save()
                 respuesta = {
-                    "message": "Usuario actualizado correctamente",
-                    "usuario": usuario_serializer.data
+                    "message": "CustomUser actualizado correctamente",
+                    "CustomUser": CustomUser_serializer.data
                 }
-                return Response(usuario_serializer.data)
-            return Response(usuario_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Usuario.DoesNotExist:
-            return Response({"error": "Usuario no encontrado"}, status.HTTP_404_NOT_FOUND)
+                return Response(CustomUser_serializer.data)
+            return Response(CustomUser_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "CustomUser no encontrado"}, status.HTTP_404_NOT_FOUND)
     
     @swagger_auto_schema(
-        operation_description="Eliminar un usuario por ID",
+        operation_description="Eliminar un CustomUser por ID",
         responses={
-            204: "Usuario eliminado correctamente",
-            404: "Usuario no encontrado",
-            400: "No se puede eliminar el usuario porque tiene pedidos asociados"
+            204: "CustomUser eliminado correctamente",
+            404: "CustomUser no encontrado",
+            400: "No se puede eliminar el CustomUser porque tiene pedidos asociados"
         }
     )
     def delete(self, request, pk):
         try:
-            usuario = Usuario.objects.get(pk=pk)
-            usuario.delete()
+            customuser = CustomUser.objects.get(pk=pk)
+            customuser.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        except Usuario.DoesNotExist:
-            return Response({"error": "Usuario no encontrado"}, status.HTTP_404_NOT_FOUND)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "CustomUser no encontrado"}, status.HTTP_404_NOT_FOUND)
         except RestrictedError:
-            return Response({"error": "No se puede eliminar el usuario porque tiene pedidos asociados"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "No se puede eliminar el CustomUser porque tiene pedidos asociados"}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProductoAPIView(APIView):
-    permission_classes = [IsAuthenticated,TienePermisoModelo]
+    model = Producto
+    permission_classes = [ AllowAny ]
     @swagger_auto_schema(
         operation_description="Obtener una lista de productos",
         responses={
@@ -199,6 +203,7 @@ class ProductoAPIView(APIView):
         return Response(producto_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class ProductoDetalleAPIView(APIView):
+    model = Producto
     permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
         operation_description="Obtener un producto por id",
@@ -232,7 +237,7 @@ class ProductoDetalleAPIView(APIView):
                 producto_serializer.save()
                 respuesta = {
                     "message": "Producto actualizado correctamente",
-                    "usuario": producto_serializer.data
+                    "CustomUser": producto_serializer.data
                 }
                 return Response(respuesta,producto_serializer.data)
             return Response(producto_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -258,35 +263,56 @@ class ProductoDetalleAPIView(APIView):
             return Response({"error": "No se puede eliminar el producto porque tiene pedidos asociados"}, status=status.HTTP_400_BAD_REQUEST)
     
 class PedidoAPIView(APIView):
+    model = Pedido
     permission_classes = [IsAuthenticated, TienePermisoModelo]
-    @swagger_auto_schema(
-        operation_description="Obtener una lista de pedidos",
-        responses={
-            200: PedidoSerializer(many=True),
-            201: PedidoSerializer,
-            400: "Error de validación"
-        }
-    )
+
+    # GET: devolver carrito actual del usuario (solo estado CARRITO)
     def get(self, request):
-        pedido = Pedido.objects.all()
-        pedido_serializer = PedidoSerializer(pedido, many=True)
-        return Response(pedido_serializer.data)
-    @swagger_auto_schema(
-        operation_description="Crear un nuevo pedido",
-        request_body=PedidoSerializer,
-        responses={
-            201: PedidoSerializer,
-            400: "Error de validación"
-        }
-    )
+        pedido = Pedido.objects.filter(usuario=request.user, estado='CARRITO').first()
+        if not pedido:
+            # si no hay carrito abierto devolvemos vacío o null
+            return Response(None, status=status.HTTP_200_OK)
+
+        pedido_serializer = PedidoSerializer(pedido)
+        return Response(pedido_serializer.data, status=status.HTTP_200_OK)
+
+    # POST: agregar producto al carrito (crear/usar pedido CARRITO)
     def post(self, request):
-        pedido_serializer = PedidoSerializer(data=request.data)
-        if pedido_serializer.is_valid():
-            pedido_serializer.save()
-            return Response(pedido_serializer.data, status=201)
-        return Response(pedido_serializer.errors, status=400)
+        id_producto = request.data.get('producto')
+        cantidad = int(request.data.get('cantidad', 1))
+
+        if not id_producto:
+            return Response(
+                {"producto": ["Este campo es requerido."]},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        producto = get_object_or_404(Producto, pk=id_producto)
+
+        # 1) Buscar o crear el carrito abierto del usuario
+        pedido, created = Pedido.objects.get_or_create(
+            usuario=request.user,
+            estado='CARRITO'
+        )
+
+        # 2) Buscar si ya existe una línea para ese producto
+        item, item_created = PedidoItem.objects.get_or_create(
+            pedido=pedido,
+            producto=producto,
+        )
+        if item_created:
+            item.cantidad = cantidad
+        else:
+            item.cantidad += cantidad  # sumar al carrito
+        item.save()
+        pedido.actualizar_precio_total()
+
+        # 3) Devolver el pedido completo con sus items
+        pedido_serializer = PedidoSerializer(pedido)
+        return Response(pedido_serializer.data, status=status.HTTP_201_CREATED)
     
 class PedidoDetalleAPIView(APIView):
+    model = Pedido
     permission_classes = [IsAuthenticated,TienePermisoModelo]
     @swagger_auto_schema(
         operation_description="Obtener un pedido por ID",
@@ -320,7 +346,7 @@ class PedidoDetalleAPIView(APIView):
                 pedido_serializer.save()
                 respuesta = {
                     "message": "Pedido actualizado correctamente",
-                    "usuario": pedido_serializer.data
+                    "CustomUser": pedido_serializer.data
                 }
                 return Response(respuesta,pedido_serializer.data)
             return Response(pedido_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -345,6 +371,7 @@ class PedidoDetalleAPIView(APIView):
         
 
 class ProductoViewSet(ModelViewSet):
+
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
     permission_classes = [IsAuthenticated, TienePermisoModelo]
@@ -361,3 +388,10 @@ class ProductoViewSet(ModelViewSet):
         if stock is not None:
             return Producto.objects.filter(stock__gt=0)
         return super().get_queryset()
+    
+class PedidoItemViewSet(ModelViewSet):
+    model = PedidoItem
+    queryset = PedidoItem.objects.all()
+    serializer_class = PedidoSerializer
+    permission_classes = [IsAuthenticated, TienePermisoModelo]
+

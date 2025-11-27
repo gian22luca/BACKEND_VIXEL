@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Usuario, Producto, Pedido, CustomUser
+from .models import  Producto, Pedido, CustomUser
 
 
-admin.site.register(Usuario)
+
 admin.site.register(CustomUser)
 admin.site.register(Pedido)
 

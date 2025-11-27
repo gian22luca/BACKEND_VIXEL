@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -127,11 +128,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-MEDIA_ROOT = BASE_DIR / 'media'
-STATIC_ROOT = BASE_DIR.parent / 'static_files'
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
+STATICFILES_DIRS = [BASE_DIR / "static_files"]
+MEDIA_ROOT = BASE_DIR / "media"
+STATIC_ROOT = BASE_DIR.parent / "static_files"
+
+STORAGES = {
+    "deafault": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "static_files": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -157,8 +169,8 @@ REST_FRAMEWORK = {
             'rest_framework.throttling.UserRateThrottle' ,
             ],
         'DEFAULT_THROTTLE_RATES' : {
-            'anon': '5/minute' , # usuarios anónimos: 10 solicitudes por minuto
-            'user': '10/hour' , # usuarios autenticados: 100 por hora
+            'anon': '50000/minute' , # usuarios anónimos: 10 solicitudes por minuto
+            'user': '50000/hour' , # usuarios autenticados: 100 por hora
             }
 
 }
@@ -168,7 +180,7 @@ from datetime import timedelta
 
 SIMPLE_JWT = {
     #TOKEN DURE 30 minutos
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30), #'00:30:00
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), #'00:30:00
 }
 
 
@@ -243,7 +255,8 @@ LOGGING = {
 }
 
 if ENV == 'production':
-    SECURE_SSL_REDIRECT=True
+    SECURE_SSL_REDIRECT=False
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE=True
     CSRF_COOKIE_SECURE=True
 

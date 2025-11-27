@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario, Producto, Pedido
+from .models import CustomUser, Producto, Pedido, PedidoItem
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -13,11 +13,24 @@ def validar_caracteres_alfebeticos(value):
             return value
 
 
+class PedidoItemSerializer(serializers.ModelSerializer):
+    # si querés incluir info del producto:
+    nombre_producto = serializers.CharField(source='producto.nombre', read_only=True)
+    precio_producto = serializers.DecimalField(
+        source='producto.precio', max_digits=10, decimal_places=2, read_only=True
+    )
+    archivo = serializers.CharField(source='producto.archivo', read_only=True)
 
-class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Usuario 
-        fields = ['id_usuario', 'nombre', 'apellido', 'email', 'empleado']
+        model = PedidoItem
+        fields = ('id', 'producto', 'cantidad',
+                  'nombre_producto', 'precio_producto', 'archivo') 
+        
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'first_name', 'last_name', 'email', 'is_staff', 'phone', 'address', 'birth_date']
         read_only_fields = ['id_usuario']
         validators = [validar_caracteres_alfebeticos]
        
@@ -26,8 +39,9 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class ProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
-        fields = ['id_producto', 'nombre', 'descripcion', 'precio', 'stock']
-        validators = [validar_caracteres_alfebeticos]
+        fields = ['id_producto', 'nombre', 'descripcion', 'precio', 'stock', 'archivo']
+        nombre = serializers.CharField(validators = [validar_caracteres_alfebeticos])
+        descipcion = serializers.CharField(validators = [validar_caracteres_alfebeticos])                                
         read_only_fields = ['id_producto']
 
     def validate_precio(self, value):
@@ -38,11 +52,12 @@ class ProductoSerializer(serializers.ModelSerializer):
     
 
 class PedidoSerializer(serializers.ModelSerializer):
+    items = PedidoItemSerializer(many=True, read_only=True)
     
     class Meta:
         model = Pedido 
-        fields = ['id_pedido', 'usuario', 'producto', 'cantidad', 'fecha_pedido', 'estado', 'precio_total']
-        read_only_fields = ['id_pedido', 'fecha_pedido']
+        fields = ['id_pedido', 'usuario', 'fecha_pedido', 'estado', 'precio_total','items']
+        read_only_fields = ['id_pedido', 'fecha_pedido','usuario']
     def validar_precio_total(self, value):
         if value < 0:
             raise serializers.ValidationError("El precio total no puede ser negativo.")
@@ -50,6 +65,7 @@ class PedidoSerializer(serializers.ModelSerializer):
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    
 
     @classmethod
     def get_token(cls, user):
@@ -59,3 +75,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['phone'] = getattr(user, 'phone', None) 
         token['is_staff'] = user.is_staff
         return token      
+    
+
+class ContactoSerializer(serializers.Serializer):
+    fist_name = serializers.CharField(max_length=50)
+    last_name = serializers.CharField(max_length=50)
+    email = serializers.EmailField()
+    phone = serializers.CharField(max_length=20, required=False, allow_blank=True)    
+    message = serializers.CharField()   
